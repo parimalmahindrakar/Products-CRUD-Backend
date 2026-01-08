@@ -57,4 +57,16 @@ class ProductUpdateResource(BaseResource):
 
         ProductMethods.update_record_with_id(product.id, **kwargs)
         db.session.commit()
-        return {"message": "Updated"}
+        return {"message": "Updated record"}
+
+
+class ProductDeleteResource(BaseResource):
+
+    @marshal_with(ProductUpdateResponseSchema, HTTPStatus.NO_CONTENT)
+    def delete(self, product_id, **kwargs):
+        if not (product := ProductMethods.get_record_with_id(product_id, db=db)):
+            raise ValueError("Product not found for the corresponding product_id")
+
+        ProductMethods.delete_record(db, product.id)
+        db.session.commit()
+        return {"message": "Deleted record"}

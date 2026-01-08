@@ -28,3 +28,7 @@ class BaseModel:
     @classmethod
     def get_paginated_records_with_filters(cls, page_number, page_size, query):
         return query.paginate(page=page_number, per_page=page_size)
+
+    @classmethod
+    def delete_record(cls, db, model_id):
+        return db.session.query(cls.model).filter(cls.model.id == model_id).delete()
